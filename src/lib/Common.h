@@ -66,14 +66,14 @@ extern cl::opt<unsigned> VerboseLevel;
 // Common functions
 //
 
-string getFileName(DILocation *Loc, 
+string getFileName(string SrcRoot, DILocation *Loc, 
 		DISubprogram *SP=NULL);
 
 bool isConstant(Value *V);
 
 string getSourceLine(string fn_str, unsigned lineno);
 
-string getSourceFuncName(Instruction *I);
+string getSourceFuncName(Instruction *I, string SrcRoot);
 
 string getValueName(Value*);
 
@@ -83,11 +83,11 @@ string extractMacro(string, Instruction* I);
 
 DILocation *getSourceLocation(Instruction *I);
 
-void printSourceCodeInfo(Value *V, string Tag = "VALUE");
-void printSourceCodeInfo(Function *F, string Tag = "FUNC");
-void WriteSourceInfoIntoFile(Function *F, string file_name);
-void WriteSourceInfoIntoFile(Value *V, string file_name);
-string getMacroInfo(Value *V);
+void printSourceCodeInfo(Value *V, string Tag = "VALUE", string SrcRoot="");
+void printSourceCodeInfo(Function *F, string Tag = "FUNC", string SrcRoot="");
+void WriteSourceInfoIntoFile(Function *F, string file_name, string SrcRoot="");
+void WriteSourceInfoIntoFile(Value *V, string file_name, string SrcRoot="");
+string getMacroInfo(Value *V, string SrcRoot="");
 
 void getSourceCodeInfo(Value *V, string &file,
                                unsigned &line);
