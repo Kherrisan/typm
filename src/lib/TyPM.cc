@@ -1138,7 +1138,7 @@ bool TyPM::resolveFunctionTargets() {
 		MSet.insert(CallerM);
 		newModuleCount += MSet.size();
 
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 		printSourceCodeInfo(CI, "RESOLVING");
 #endif
 		for (auto Callee : Ctx->Callees[CI]) {
@@ -1156,7 +1156,7 @@ bool TyPM::resolveFunctionTargets() {
 				   ) {
 
 					Ctx->Callees[CI].erase(Callee);
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 					printSourceCodeInfo(Callee, "REMOVED");
 #endif
 				}
@@ -1166,7 +1166,7 @@ bool TyPM::resolveFunctionTargets() {
 			}
 		}
 		mapDeclToActualFuncs(Ctx->Callees[CI]);
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 		printTargets(Ctx->Callees[CI], CI);
 #endif
 	}

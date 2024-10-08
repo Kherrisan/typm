@@ -910,6 +910,47 @@ void MLTA::printTypeChain(list<typeidx_t> &Chain) {
 	OP<<"\n";
 }
 
+void MLTA::dumpTargets(FuncSet &FS, CallInst *CI) {
+	if (!OUTPUT_FILE)
+		return;
+
+	DILocation *Loc = getSourceLocation(CI);
+	if (!Loc)
+		return;
+
+	unsigned CallerLineNo = Loc->getLine();
+	std::string CallerFN = getFileName(SRC_ROOT, Loc);
+	string CallerLine = getSourceLine(CallerFN, CallerLineNo);
+	CallerFN = Loc->getFilename().str();
+
+	for (auto F : FS) {
+		if (F->isDeclaration()) {
+			continue;
+		}
+
+		DISubprogram *SP = F->getSubprogram();
+
+		if (!SP)
+			continue;
+
+		string FN = getFileName(SRC_ROOT, NULL, SP);
+		string line = getSourceLine(FN, SP->getLine());
+		while (line[0] == ' ' || line[0] == '\t')
+			line.erase(line.begin());
+
+		FN = SP->getFilename().str();
+
+		*OUTPUT_FILE << CallerFN << "," 
+					<< CallerLineNo << "," 
+					<< "\"" << CallerLine << "\"," 
+					<< FN << "," 
+					<< SP->getLine() << ","
+					<< "\"" << line << "\","
+					<< F->getName().str()
+					<< "\n";
+	}
+}
+
 void MLTA::printTargets(FuncSet &FS, CallInst *CI) {
 
 	if (CI) {

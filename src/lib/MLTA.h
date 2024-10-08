@@ -124,6 +124,7 @@ class MLTA {
 		void unrollLoops(Function *F);
 		void saveCalleesInfo(CallInst *CI, FuncSet &FS, bool mlta);
 		void printTargets(FuncSet &FS, CallInst *CI = NULL);
+		void dumpTargets(FuncSet &FS, CallInst *CI);
 		void printTypeChain(list<typeidx_t> &Chain);
 
 

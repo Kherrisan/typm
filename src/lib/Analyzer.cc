@@ -33,6 +33,11 @@
 
 using namespace llvm;
 
+cl::opt<std::string> OutputFile(
+	"output",
+	cl::desc("Specify the output file"),
+	cl::init(""));
+
 // Command line parameters.
 cl::list<std::string> InputFilenames(
 	cl::Positional, cl::ZeroOrMore, cl::desc("<input bitcode files>"));
@@ -172,6 +177,17 @@ int main(int argc, char **argv)
 
 	cl::ParseCommandLineOptions(argc, argv, "global analysis\n");
 	SMDiagnostic Err;
+
+	SRC_ROOT = SrcRoot;
+
+	if (!OutputFile.empty())
+	{
+		OUTPUT_FILE = std::make_unique<std::ofstream>(OutputFile, std::ios::out);
+		if (!OUTPUT_FILE->is_open()) {
+			errs() << "Error: Unable to open output file " << OutputFile << "\n";
+			return 1;
+		}
+	}
 
 	if (!BCListFile.empty())
 	{

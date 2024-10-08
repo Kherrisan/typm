@@ -10,7 +10,7 @@
 #include <fstream>
 #include <map> 
 #include "Common.h"
-
+#include <memory>
 
 using namespace std;
 using namespace llvm;
@@ -25,6 +25,8 @@ using namespace llvm;
 extern int ENABLE_MLTA;
 extern int ENABLE_TYDM;
 extern int MAX_PHASE_CG;
+extern std::unique_ptr<std::ofstream> OUTPUT_FILE;
+extern string SRC_ROOT;
 
 #define SOUND_MODE 1
 #define UNROLL_LOOP_ONCE 1

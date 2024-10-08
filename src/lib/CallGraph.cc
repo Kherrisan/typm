@@ -145,7 +145,7 @@ void CallGraphPass::PhaseMLTA(Function *F)
 			if (ENABLE_MLTA > 1) {
 				if (CI->isIndirectCall()) {
 
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 					printSourceCodeInfo(CI, "RESOLVING");
 #endif
 
@@ -155,7 +155,7 @@ void CallGraphPass::PhaseMLTA(Function *F)
 					//	saveCalleesInfo(CI, FS, true);
 					for (auto F : Ctx->sigFuncsMap[callHash(CI)]) {
 						if (FS->find(F) == FS->end()) {
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 							if ((OutScopeFuncs.find(F) == OutScopeFuncs.end())
 									&& (StoredFuncs.find(F) != StoredFuncs.end())) {
 								printSourceCodeInfo(F, "REMOVED");
@@ -167,7 +167,7 @@ void CallGraphPass::PhaseMLTA(Function *F)
 #endif
 						}
 					}
-#ifdef PRINT_ICALL_TARGET
+#ifdef PRINT_ICALL_TARGET_ON_THE_FLY
 					printTargets(*FS, CI);
 #endif
 				}
@@ -448,7 +448,10 @@ bool CallGraphPass::doFinalization(Module *M)
 			if (CI->isIndirectCall())
 			{
 				Ctx->NumIndirectCallTargets += Ctx->Callees[CI].size();
+				dumpTargets(Ctx->Callees[CI], CI);
+#ifdef PRINT_ICALL_TARGET
 				printTargets(Ctx->Callees[CI], CI);
+#endif
 			}
 		}
 
