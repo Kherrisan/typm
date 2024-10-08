@@ -1,8 +1,7 @@
-CUR_DIR = $(shell pwd)
-LLVM_BUILD := ${CUR_DIR}/llvm-project/prefix
+CUR_DIR := $(shell pwd)
+LLVM_BUILD := ${CUR_DIR}/llvm-project/install
 ANALYZER_DIR := ${CUR_DIR}/src
 ANALYZER_BUILD := ${CUR_DIR}/build
-
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)

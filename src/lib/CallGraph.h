@@ -7,48 +7,45 @@
 #include "Config.h"
 #include <time.h>
 
-class CallGraphPass : 
-	public virtual IterativeModulePass, public virtual TyPM {
+class CallGraphPass : public virtual IterativeModulePass, public virtual TyPM
+{
 
-	private:
+private:
+	//
+	// Variables
+	//
 
-		//
-		// Variables
-		//
+	// Index of the module
+	int MIdx;
 
-		// Index of the module
-		int MIdx;
+	//
+	// Methods
+	//
 
+	// Phases
+	void PhaseMLTA(Function *F);
+	void PhaseTyPM(Function *F);
 
-		//
-		// Methods
-		//
+public:
+	static int AnalysisPhase;
 
-		// Phases
-		void PhaseMLTA(Function *F);
-		void PhaseTyPM(Function *F);
+	CallGraphPass(GlobalContext *Ctx_)
+		: IterativeModulePass(Ctx_, "CallGraph"),
+		  TyPM(Ctx_)
+	{
 
+		LoadElementsStructNameMap(Ctx->Modules);
+		MIdx = 0;
 
-	public:
-		static int AnalysisPhase;
+		time_t my_time = time(NULL);
+		OP << "# TIME: " << ctime(&my_time) << "\n";
+	}
 
-		CallGraphPass(GlobalContext *Ctx_)
-			: IterativeModulePass(Ctx_, "CallGraph"), 
-			TyPM(Ctx_) {
+	virtual bool doInitialization(llvm::Module *);
+	virtual bool doFinalization(llvm::Module *);
+	virtual bool doModulePass(llvm::Module *);
 
-				LoadElementsStructNameMap(Ctx->Modules);
-				MIdx = 0;
-
-				time_t my_time = time(NULL);
-				OP<<"# TIME: "<<ctime(&my_time)<<"\n";
-			}
-
-		virtual bool doInitialization(llvm::Module *);
-		virtual bool doFinalization(llvm::Module *);
-		virtual bool doModulePass(llvm::Module *);
-
-		void processResults();
-
+	void processResults();
 };
 
 #endif
